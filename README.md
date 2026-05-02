@@ -12,13 +12,14 @@
 
 - OpenCore：1.0.7 core files
 - 目标系统：macOS Sonoma 14
+- 实测系统：macOS Sonoma 14.8.5（23J423）
 - 机器：Huawei MateBook X Pro 2019
 - CPU：Intel Whiskey Lake-U（例如 i5-8265U）
 - 核显：Intel UHD Graphics 620
 - 独显：NVIDIA MX250，已禁用
 - 内存：未按 16 GB 改装机处理，配置按普通 8 GB/当前机器风格整理
 - 显示：使用 demonlj 正常 HDMI/DP/USB-C 外接屏配置
-- 调试：默认开启 verbose/debug 和 OpenCore 文件日志，方便安装阶段排错
+- 调试：安装前版本默认开启 verbose/debug 和 OpenCore 文件日志，方便安装阶段排错
 
 已验证：
 
@@ -26,6 +27,22 @@
 - 可安装并启动 macOS
 - APFS 系统分区可从 OpenCore 引导
 - 外接显示器安装路径可用
+- 可从外置 USB macOS 迁移到内置 128 GB NVMe 后独立启动
+- 内置 NVMe 启动状态下 System/Data 卷组、Preboot、Recovery、sealed APFS snapshot 正常
+
+## 版本目录
+
+仓库现在保留两个公开脱敏版本：
+
+```text
+versions/pre-install-debug/EFI
+versions/post-install-nvme-stable/EFI
+```
+
+- `versions/pre-install-debug/EFI`：安装前/恢复环境/第一次启动用，开启 `-v`、`debug=0x100`、`keepsyms=1` 和 OpenCore 文件日志。
+- `versions/post-install-nvme-stable/EFI`：安装后稳定启动用，来自一次外置 USB macOS 迁移到内置 128 GB NVMe 后成功启动的配置，关闭 verbose/debug 和 OpenCore 文件日志。
+
+根目录 `EFI/` 保持为安装调试版，方便直接复制到安装盘。每个版本目录里都有自己的 `VERSION.md`，记录对应的 boot-args、调试开关和验证状态。
 
 ## 重要提醒
 
@@ -160,14 +177,15 @@ EFI/BOOT/BOOTX64.efi
 ## 安装步骤简述
 
 1. 准备 macOS Sonoma 14 安装盘或 Recovery
-2. 把本仓库 `EFI` 放到安装盘 EFI 分区根目录
+2. 把本仓库根目录 `EFI` 或 `versions/pre-install-debug/EFI` 放到安装盘 EFI 分区根目录
 3. 开机进入启动菜单
 4. 选择 USB / OpenCore
 5. 第一次更换 EFI 后建议 Reset NVRAM
 6. 进入 macOS Installer / Recovery
 7. 安装完成后可继续用这个 EFI 引导系统
+8. 系统稳定后，可把 `versions/post-install-nvme-stable/EFI` 复制到内置 NVMe 的 EFI 分区
 
-## 当前 boot-args
+## 基础 boot-args
 
 ```text
 -igfxblt -igfxonln=1 -igfxmlr -igfxblr -no_compat_check ipc_control_port_options=0 -amfipassbeta revpatch=sbvmm -wegnoegpu
@@ -180,9 +198,15 @@ EFI/BOOT/BOOTX64.efi
 - `-amfipassbeta` / `revpatch=sbvmm`：Sonoma 相关兼容参数
 - `-igfx*`：核显/外接显示相关 WhateverGreen 参数
 
+安装前调试版会在这个基础上额外追加：
+
+```text
+debug=0x100 keepsyms=1 -v
+```
+
 ## 调试模式
 
-当前公开 EFI **默认开启调试**，方便安装阶段排错：
+安装前调试版 **默认开启调试**，方便安装阶段排错：
 
 ```text
 -v              已启用
@@ -193,7 +217,7 @@ Target          67
 DisplayLevel    2147483650
 ```
 
-安装成功、确认可以稳定进入系统后，可以关闭调试模式来减少启动文字和日志文件。
+安装成功、确认可以稳定进入系统后，可以切换到 `versions/post-install-nvme-stable/EFI`，或手动关闭调试模式来减少启动文字和日志文件。
 
 关闭方法：打开 `EFI/OC/config.plist`，修改：
 
@@ -247,6 +271,13 @@ Misc -> Debug -> LogModules = 空字符串
 │       ├── Kexts
 │       ├── Tools
 │       └── config.plist
+├── versions
+│   ├── pre-install-debug
+│   │   ├── EFI
+│   │   └── VERSION.md
+│   └── post-install-nvme-stable
+│       ├── EFI
+│       └── VERSION.md
 ├── cfgunlock.zip
 └── README.md
 ```
