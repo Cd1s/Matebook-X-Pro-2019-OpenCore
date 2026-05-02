@@ -18,7 +18,7 @@
 - 独显：NVIDIA MX250，已禁用
 - 内存：未按 16 GB 改装机处理，配置按普通 8 GB/当前机器风格整理
 - 显示：使用 demonlj 正常 HDMI/DP/USB-C 外接屏配置
-- 调试：已关闭 verbose/debug 启动参数和 OpenCore 文件日志
+- 调试：默认开启 verbose/debug 和 OpenCore 文件日志，方便安装阶段排错
 
 已验证：
 
@@ -75,7 +75,7 @@ U盘根目录
 EFI/BOOT/BOOTX64.efi
 ```
 
-然后开机按 F12 从这个 U 盘启动。
+然后从启动菜单选择这个 U 盘启动。
 
 ## 关闭 CFG Lock
 
@@ -94,8 +94,8 @@ EFI/BOOT/BOOTX64.efi
    EFI/BOOT/BOOTX64.efi
    ```
 
-7. 重启，从这个 U 盘启动
-8. 启动后按 `F12`
+7. 重启，从启动菜单选择这个 U 盘启动
+8. 进入工具后按 `Alt + =` 切换到 ACPI Variable
 9. 用方向键找到 `CpuSetup`
 10. 回车进入 `CpuSetup`
 
@@ -161,8 +161,8 @@ EFI/BOOT/BOOTX64.efi
 
 1. 准备 macOS Sonoma 14 安装盘或 Recovery
 2. 把本仓库 `EFI` 放到安装盘 EFI 分区根目录
-3. 开机按 F12
-4. 选择 USB / NVMe / OpenCore
+3. 开机进入启动菜单
+4. 选择 USB / OpenCore
 5. 第一次更换 EFI 后建议 Reset NVRAM
 6. 进入 macOS Installer / Recovery
 7. 安装完成后可继续用这个 EFI 引导系统
@@ -182,22 +182,41 @@ EFI/BOOT/BOOTX64.efi
 
 ## 调试模式
 
-当前公开 EFI 已关闭调试噪音：
+当前公开 EFI **默认开启调试**，方便安装阶段排错：
 
 ```text
--v              未启用
-debug=0x100     未启用
-keepsyms=1      未启用
-AppleDebug      false
-Target          0
-DisplayLevel    0
+-v              已启用
+debug=0x100     已启用
+keepsyms=1      已启用
+AppleDebug      true
+Target          67
+DisplayLevel    2147483650
 ```
 
-如需排错，可自行临时加回：
+安装成功、确认可以稳定进入系统后，可以关闭调试模式来减少启动文字和日志文件。
+
+关闭方法：打开 `EFI/OC/config.plist`，修改：
+
+```text
+NVRAM -> Add -> 7C436110-AB2A-4BBB-A880-FE41995C9F82 -> boot-args
+```
+
+删除这三个参数：
 
 ```text
 -v debug=0x100 keepsyms=1
 ```
+
+然后修改：
+
+```text
+Misc -> Debug -> AppleDebug = false
+Misc -> Debug -> Target = 0
+Misc -> Debug -> DisplayLevel = 0
+Misc -> Debug -> LogModules = 空字符串
+```
+
+保存后重启，如果旧参数还存在，进 OpenCore 执行一次 Reset NVRAM。
 
 ## 已知问题
 

@@ -1560,7 +1560,7 @@
 		<key>Debug</key>
 		<dict>
 			<key>AppleDebug</key>
-			<false/>
+			<true/>
 			<key>ApplePanic</key>
 			<true/>
 			<key>DisableWatchDog</key>
@@ -1568,13 +1568,13 @@
 			<key>DisplayDelay</key>
 			<integer>0</integer>
 			<key>DisplayLevel</key>
-			<integer>0</integer>
+			<integer>2147483650</integer>
 			<key>LogModules</key>
-			<string></string>
+			<string>*</string>
 			<key>SysReport</key>
 			<false/>
 			<key>Target</key>
-			<integer>0</integer>
+			<integer>67</integer>
 		</dict>
 		<key>Entries</key>
 		<array/>
@@ -1744,7 +1744,7 @@
 				Rg==
 				</data>
 				<key>boot-args</key>
-				<string>-igfxblt -igfxonln=1 -igfxmlr -igfxblr -no_compat_check ipc_control_port_options=0 -amfipassbeta revpatch=sbvmm -wegnoegpu</string>
+				<string>-igfxblt -igfxonln=1 -igfxmlr -igfxblr -no_compat_check ipc_control_port_options=0 -amfipassbeta revpatch=sbvmm -wegnoegpu debug=0x100 keepsyms=1 -v</string>
 				<key>csr-active-config</key>
 				<data>
 				fwoAAA==
