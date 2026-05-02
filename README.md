@@ -1,6 +1,6 @@
-# Huawei MateBook X Pro 2019 OpenCore（Headless / 外接屏）
+# Huawei MateBook X Pro 2019 OpenCore（内置屏 / 外接屏 / Headless）
 
-这是一个基于 OpenCore 的 Huawei MateBook X Pro 2019 黑苹果 EFI 备份，主要面向 **2019 款 MateBook X Pro**，并针对外接显示器安装/启动场景整理。
+这是一个基于 OpenCore 的 Huawei MateBook X Pro 2019 黑苹果 EFI 备份，主要面向 **2019 款 MateBook X Pro**，支持内置屏正常使用，同时兼容外接显示器与 headless/无内屏安装启动场景。
 
 本仓库 EFI 来自实际安装成功后的配置整理，参考并感谢：
 
@@ -18,7 +18,7 @@
 - 核显：Intel UHD Graphics 620
 - 独显：NVIDIA MX250，已禁用
 - 内存：未按 16 GB 改装机处理，配置按普通 8 GB/当前机器风格整理
-- 显示：使用 demonlj 正常 HDMI/DP/USB-C 外接屏配置
+- 显示：内置屏可用，同时保留 demonlj 正常 HDMI/DP/USB-C 外接屏配置
 - 调试：安装前版本默认开启 verbose/debug 和 OpenCore 文件日志，方便安装阶段排错
 
 已验证：
