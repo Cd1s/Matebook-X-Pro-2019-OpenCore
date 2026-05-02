@@ -98,6 +98,9 @@ EFI/BOOT/BOOTX64.efi
 8. 启动后按 `F12`
 9. 用方向键找到 `CpuSetup`
 10. 回车进入 `CpuSetup`
+
+![CpuSetup 示例](docs/images/cpusetup.jpg)
+
 11. 找到：
 
    ```text
@@ -134,6 +137,8 @@ EFI/BOOT/BOOTX64.efi
    ```text
    0100
    ```
+
+![DVMT / SaSetup 示例](docs/images/dvmt64.png)
 
 4. 在地址 `0100` 页面修改：
 
@@ -200,6 +205,16 @@ DisplayLevel    0
 - NVIDIA MX250 不可用，已禁用
 - 不同 BIOS 版本、DVMT 状态、Thunderbolt 安全设置可能影响外接显示器
 - 使用 iCloud / iMessage 前必须自己生成有效三码
+
+## 内存改装图片（来自参考项目）
+
+本机当前没有按 16 GB 改装机处理。下面图片仅作为 demonlj 参考项目里的内存改装记录留档，不是安装本 EFI 的必要步骤。
+
+![内存改装前](docs/images/memory-before1.png)
+
+![内存改装后 1](docs/images/memory-after1.png)
+
+![内存改装后 2](docs/images/memory-after2.png)
 
 ## 文件结构
 
